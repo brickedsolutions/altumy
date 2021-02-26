@@ -8,7 +8,7 @@ const router = express.Router(); // eslint-disable-line new-cap
 const paramValidation = {
   updateUser: {
     body: Joi.object({
-      email: Joi.string().required(),
+      email: Joi.string(),
       firstName: Joi.string(),
       lastName: Joi.string(),
     }),
