@@ -1,4 +1,5 @@
 const express = require('express');
+const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const compress = require('compression');
 const methodOverride = require('method-override');
@@ -12,6 +13,9 @@ const APIError = require('./helpers/APIError');
 
 const app = express();
 
+if (config.env === 'development') {
+  app.use(logger('dev'));
+}
 // parse body params and attache them to req.body
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -46,10 +50,10 @@ app.use((err, req, res, next) => {
 });
 
 // catch 404 and forward to error handler
-//app.use((req, res, next) => {
-//  const err = new APIError('API Not Found', httpStatus.NOT_FOUND);
-//  return next(err);
-//});
+app.use((req, res, next) => {
+  const err = new APIError('API Not Found', httpStatus.NOT_FOUND);
+  return next(err);
+});
 
 // error handler, send stacktrace only during development
 app.use((err, req, res, next) => // eslint-disable-line no-unused-vars
